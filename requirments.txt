@@ -1,0 +1,13 @@
+langchain
+langchainhub
+langgraph
+streamlit
+openai
+faiss-cpu
+duckduckgo-search
+tiktoken
+pypdf
+chromadb
+sqlite3  # or tinydb/json
+streamlit-extras
+streamlit-option-menu

@@ -1,0 +1,2 @@
+Artificial Intelligence is the simulation of human intelligence in machines. 
+It enables machines to learn from experience, adjust to new inputs, and perform human-like tasks.
