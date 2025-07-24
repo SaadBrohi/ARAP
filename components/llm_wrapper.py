@@ -1,21 +1,30 @@
-from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
+import os
+from llama_cpp import Llama
 
 class LLMWrapper:
-    def __init__(self, model_name: str = "google/flan-t5-base"):
-        print(f"🔗 Loading Hugging Face LLM: {model_name}")
-        self.tokenizer = AutoTokenizer.from_pretrained(model_name)
-        self.model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
-        self.pipeline = pipeline(
-            "text2text-generation",
-            model=self.model,
-            tokenizer=self.tokenizer,
-            device=-1  # -1 means CPU
-        )
-        print("✅ Model loaded and ready.")
+    def __init__(self):
+        model_path = "models/Phi-3-mini-4k-instruct.Q4_0.gguf"
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"❌ Model file not found at: {model_path}. Please ensure it's correctly placed.")
 
-    def generate_answer(self, prompt: str, max_length: int = 256) -> str:
-        if not prompt.strip():
-            return "❗ Empty prompt provided."
-        
-        result = self.pipeline(prompt, max_length=max_length, do_sample=False)
-        return result[0].get('generated_text', '').strip()
+        print(f"🔗 Loading Phi-3 from: {model_path}")
+        self.llm = Llama(
+            model_path=model_path,
+            n_ctx=4096,
+            n_threads=4,
+            n_gpu_layers=0,  # CPU-only
+            verbose=False
+        )
+        print("✅ Phi-3 model loaded successfully.")
+
+    def generate_answer(self, prompt: str) -> str:
+        print("🧠 Generating answer...\n")
+        response = self.llm.create_chat_completion(
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant who answers clearly, concisely, and intelligently."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.7,
+            max_tokens=512,
+        )
+        return response["choices"][0]["message"]["content"].strip()

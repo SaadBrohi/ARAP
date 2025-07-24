@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 *.db
 embeddings/
+models/Phi-3-mini-4k-instruct.Q4_0.gguf
+

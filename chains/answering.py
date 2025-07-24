@@ -5,18 +5,11 @@ class AnswerGenerator:
         self.llm = LLMWrapper()
 
     def answer(self, question: str, context: str = "") -> str:
-        if not question.strip():
-            return "❗ Question cannot be empty."
-
-        prompt = f"""
-You are a helpful AI assistant. Use the context below to answer the question clearly.
-
-📚 Context:
-{context}
-
-❓ Question:
-{question}
-
-🧠 Answer:"""
-
+        # Carefully designed prompt for better results
+        prompt = (
+            "Answer the question based on the context below. "
+            "If the context does not contain enough information, answer intelligently and informatively.\n\n"
+            f"Context:\n{context}\n\n"
+            f"Question:\n{question}\n"
+        )
         return self.llm.generate_answer(prompt)
