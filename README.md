@@ -1,72 +1,93 @@
-# 🔍 ARAP – Advanced Retrieval-Augmented Pipeline
+# 📚 QueryVerse — Local LLM-Powered Document QA System
 
-**ARAP** is a modular and intelligent document-aware AI system that answers user questions by combining Retrieval-Augmented Generation (RAG), LangGraph agents, and LangChain-powered pipelines. It supports uploading PDFs, retrieving contextual answers, and visualizing intelligent responses.
+QueryVerse is a fully local, intelligent question-answering system that enables users to interact with their own documents using natural language. It combines local embedding models, a retrieval-augmented generation (RAG) pipeline, and a locally hosted LLM (Phi-3) to deliver fast, private, and context-aware answers — optionally enhanced with real-time web results.
 
----
-
-## 🚀 Features
-
-- 🧠 LLM-powered Q&A on your documents (PDFs, text)
-- 📂 Drag-and-drop file upload
-- 🕸️ Document chunking and embedding
-- 🔗 LangGraph agent routing
-- 🗂️ Dynamic memory & context history
-- 📊 Source citations for traceable answers
-- 🌐 Optional web search fallback (DuckDuckGo)
-- 🧩 Easily pluggable LLMs: OpenAI, Anthropic, Cohere, etc.
-- 📌 Streamlit-based responsive interface
+> ⚙️ Powered by `Phi-3-mini-4k-instruct` (via llama-cpp), FAISS, and SentenceTransformers — no internet or external APIs required (unless web search is enabled).
 
 ---
 
-## 📁 Project Structure
+## 🔧 Features
 
+- 📄 **Multi-document support**: Upload PDFs or text files and ask questions across them.
+- 🧠 **Local vector search**: Uses FAISS with sentence-transformer embeddings for efficient semantic retrieval.
+- 🤖 **LLM response generation**: Uses a locally hosted Phi-3 model for natural and informative answers.
+- 🎭 **Persona selection**: Choose between *Precise*, *Friendly*, and *Technical* assistant styles.
+- 🌐 **Optional web augmentation**: If enabled, SerpAPI provides real-time web search integration.
+- 💬 **Chat memory**: Maintains and displays the last 10 conversations for context and continuity.
+- 🎨 **Modern UI**: Built with Streamlit and styled for a sleek, dark, and conversational interface.
 
 
 ---
 
-## 🚀 Demo (Optional)
+## 🚀 Getting Started
 
-Live demo hosted on [Hugging Face Spaces](https://huggingface.co/spaces/saadbrohi/arap)  
-*(Will Update link after deployment)*
+### 1. 📥 Install Requirements
 
----
+pip install -r requirements.txt
 
-## 🛠️ Tech Stack
+### 2. 🧠 Download LLM & Embedding Model
 
-| Technology     | Use                              |
-|----------------|----------------------------------|
-| Streamlit      | UI & interaction layer           |
-| LangChain      | RAG orchestration                |
-| Some GPT       | Language model backend           |
-| FAISS          | Embedding vector search          |
-| PyMuPDF / docx | PDF/DOCX parsing                 |
-| Hugging Face   | Deployment platform    |
+Place the Phi-3-mini-4k-instruct.Q4_0.gguf in models/
 
----
+Place the all-mpnet-base-v2 folder in models/ if running locally, or use it from HuggingFace.
 
-## ✨ Example Use Case
+### 3. 🔐 (Optional) Set SerpAPI Key
 
-Upload 2–3 documents (PDF, DOCX, or TXT)
+If using web search:
 
-Ask: "What are the key differences between supervised and unsupervised learning?"
-
-ARAP scans your files, finds relevant content, and gives a precise GPT-powered answer grounded in your files.
+export SERPAPI_API_KEY="your_api_key_here"
 
 ---
 
 
-## 🤝 Contributing
+### 💡 How It Works
 
-Contributions are welcome! Please open an issue or submit a PR.
+Upload Documents → Stored in uploaded_docs/
 
-## 🧾 License
-MIT License © 2025 Saad Suleman Brohi
+Run Ingestion → Extract text, split into chunks, embed, and index with FAISS
 
-## 🙌 Acknowledgements
+Ask a Question → Embed query, retrieve top k relevant chunks
 
-LangChain
-FAISS by Meta
-OpenAI
-Streamlit
-Hugging Face Spaces
+Generate Answer → Feed question + context to LLM, render with persona
+
+Optional Web Search → Appends SerpAPI results into LLM prompt
+
+---
+
+### ⚙️ Configuration
+
+Chunking: 250 tokens with 40 overlap
+
+LLM Context Window: 4096 tokens
+
+Max Tokens per Response: 512
+
+FAISS Vector Index: Saved to vectorstore_index/
+
+---
+
+### Tech Stack
+
+| Component      | Tech/Library                           |
+| -------------- | -------------------------------------- |
+| Embeddings     | SentenceTransformers (`mpnet-base-v2`) |
+| Vector Search  | FAISS                                  |
+| LLM            | Phi-3 via `llama-cpp-python`           |
+| Web Search     | SerpAPI (Google engine)                |
+| UI             | Streamlit + Custom CSS                 |
+| Text Splitting | LangChain                              |
+
+
+### 🔒 Privacy First
+All processing — including embedding and LLM inference — runs locally on your machine. No data leaves your device unless you explicitly enable web search.
+
+
+### 🙌 Credits
+Built with 💻 by Saad Brohi
+Inspired by the power of retrieval-augmented generation, this project reflects a local-first, privacy-respecting approach to conversational AI.
+
+### 📄 License
+MIT License — use it, improve it, and contribute back.
+
+
 
